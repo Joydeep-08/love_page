@@ -7,10 +7,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>if(new URLSearchParams(location.search).get('id'))document.documentElement.classList.add('boot')</script>
 <style>
-:root{--cream:#FFF8F3;--paper:#FFFDFA;--blush:#F8DCE1;--rose:#E7A3B0;--deep:#C76F82;--sage:#A9BFA5;--kraft:#EBDCC5;--ink:#4B3A40;--soft:#8C7279;--line:#EBCFD5}
+:root{--cream:#2b0c16;--paper:#FFFAF5;--blush:#FDEEF0;--rose:#E28AA3;--deep:#B83B5E;--sage:#C9A13B;--kraft:#F3D3DA;--ink:#3A0F1A;--soft:#8A4A5C;--line:#ECC3CF}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Nunito,sans-serif;color:var(--ink);min-height:100vh;display:flex;justify-content:center;padding:24px 12px 60px;background:radial-gradient(circle,rgba(199,111,130,.08) 1.5px,transparent 1.5px) 0 0/22px 22px,linear-gradient(160deg,#FFF6F0,#FBE6EA 55%,#F3EEF8) fixed}
-.frame{width:100%;max-width:460px;background:var(--paper);border:1px solid var(--line);border-radius:26px;box-shadow:0 18px 50px rgba(199,111,130,.18);overflow:hidden;position:relative;min-height:600px;display:flex;flex-direction:column;align-self:flex-start}
+body{font-family:Nunito,sans-serif;color:var(--ink);min-height:100vh;display:flex;justify-content:center;padding:24px 12px 60px;background:radial-gradient(circle,rgba(255,255,255,.05) 1.5px,transparent 1.5px) 0 0/22px 22px,linear-gradient(160deg,#3d0f1c,#7D1730 55%,#2a0a14) fixed}
+.frame{width:100%;max-width:460px;background:#7D1730;border-radius:26px;padding:14px;box-shadow:0 24px 60px -18px rgba(90,10,30,.6);position:relative;align-self:flex-start}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 32px rgba(75,15,30,.25);overflow:hidden;position:relative;min-height:600px;display:flex;flex-direction:column}
 section{display:none;flex:1;flex-direction:column;padding:30px 24px;animation:up .5s ease both}
 #s-form{display:flex}
 html.boot #s-form{display:none!important}html.boot #s-boot{display:flex!important}
@@ -63,20 +64,31 @@ textarea.inp{resize:none;font-family:Caveat,cursive;font-size:18px;line-height:1
 @keyframes blink{50%{opacity:0}}
 /* certificate */
 #cert{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(199,111,130,.18);margin:14px 0 6px}
-/* board */
+/* board — pinterest-style masonry vision board */
 #s-board{overflow-y:auto}
-.board{display:grid;grid-template-columns:1fr 1fr;gap:26px 16px;padding:8px 2px;position:relative}
-.span{grid-column:1/-1}
-.note{background:var(--kraft);padding:14px 12px;font-size:12px;line-height:1.7;box-shadow:0 5px 14px rgba(75,58,64,.12);position:relative}
-.note b{font:700 20px Caveat;color:var(--deep);display:block;text-align:center;margin-bottom:2px}
-.note li{list-style:none}.note li::before{content:'✓ ';color:var(--sage);font-weight:700}
-.gridnote{background:#fff linear-gradient(rgba(169,191,165,.35) 1px,transparent 1px) 0 0/100% 20px,linear-gradient(90deg,rgba(169,191,165,.35) 1px,transparent 1px) 0 0/20px 100%;padding:28px 10px;text-align:center;box-shadow:0 5px 14px rgba(75,58,64,.12);position:relative}
-.gridnote div{font:700 40px/1 'Cormorant Garamond',serif;letter-spacing:-1px}
-.quote{font:600 21px/1.3 Caveat;text-align:center;color:var(--ink);padding:4px 14px}
-.stk{position:absolute;font-size:22px;pointer-events:none}
+.masonry{column-count:2;column-gap:14px;padding:6px 2px 4px}
+.mitem{break-inside:avoid;margin-bottom:16px}
+.mitem.full{column-span:all}
+.mphoto{background:var(--paper);padding:8px 8px 22px;border-radius:3px;box-shadow:0 12px 24px -10px rgba(184,59,94,.4);position:relative}
+.mphoto img{width:100%;object-fit:cover;border-radius:1px;display:block;background:var(--blush)}
+.mphoto.focus img{aspect-ratio:4/5}
+.mphoto.side{width:80%;margin:0 auto}
+.mphoto.side img{aspect-ratio:1/1}
+.mcap{position:absolute;left:50%;bottom:5px;transform:translateX(-50%);font-family:Caveat,cursive;font-size:14px;font-weight:600;color:var(--deep);white-space:nowrap}
+.mnote{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:13px 12px;box-shadow:0 10px 20px -12px rgba(184,59,94,.35);font-size:11px;color:var(--soft);line-height:1.6;text-align:left}
+.mnote h4{font-family:Caveat,cursive;font-size:18px;color:var(--deep);margin-bottom:6px;font-weight:600;text-align:center}
+.mnote ul{list-style:none;text-align:left}
+.mnote li{margin-bottom:4px;padding-left:14px;position:relative}
+.mnote li::before{content:'♥';position:absolute;left:0;top:1px;font-size:9px;color:var(--sage)}
+.mtape{position:absolute;width:44px;height:15px;background:rgba(243,211,218,.9);border:1px solid rgba(184,59,94,.15);top:-8px;left:50%;transform:translateX(-50%) rotate(-3deg);border-radius:2px;z-index:2}
+.mclip{position:absolute;top:-12px;right:14px;font-size:20px;transform:rotate(14deg);z-index:2}
+.mquote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--ink);padding:16px 18px;background:var(--blush);border-radius:12px;line-height:1.6;position:relative}
+.mribbon{background:var(--deep);color:#fff;border-radius:10px;padding:12px 10px;font-size:11px;letter-spacing:.3px;text-align:center;line-height:1.6}
+.mribbon .sc{font-size:16px;display:block;margin-top:2px}
 .foot{text-align:center;font-size:10px;letter-spacing:2px;color:var(--soft);margin-top:18px}
 </style></head><body>
 <div class="frame">
+<div class="card">
 <button class="mute" id="mute" onclick="toggleMute()">🔊</button>
 
 <section id="s-boot" style="display:none;align-items:center;justify-content:center;text-align:center">
@@ -127,18 +139,18 @@ textarea.inp{resize:none;font-family:Caveat,cursive;font-size:18px;line-height:1
 </section>
 
 <section id="s-board">
-<div class="sc" style="font-size:28px;text-align:center;color:var(--deep)">everything I want for us</div>
-<p class="sub" style="margin-bottom:22px">pinned, just for you</p>
-<div class="board">
-<div class="pol" id="bp0" style="transform:rotate(-3deg)"><span class="tag">LOVE</span><img style="aspect-ratio:4/5" src=""><div class="cap">my favourite person</div></div>
-<div class="note" style="transform:rotate(2deg);align-self:center"><b>Our little goals</b><ul><li>More trips, together</li><li>Late-night long talks</li><li>Never sleep angry</li><li>Grow old, still silly</li></ul></div>
-<div class="gridnote span"><div>OUR<br>VISION<br>BOARD</div><span class="stk" style="top:8px;right:14px">🌸</span><span class="stk" style="bottom:8px;left:14px">🎀</span></div>
-<div class="pol" id="bp1" style="transform:rotate(2.5deg)"><span class="tag">US</span><img style="aspect-ratio:4/5" src=""><div class="cap">just us</div></div>
-<div class="pol" id="bp2" style="transform:rotate(-2deg)"><span class="tag">MEMORIES</span><img style="aspect-ratio:4/5" src=""><div class="cap">cherish every moment</div></div>
-<div class="quote span">Do more of what you love, and love me a little more while you do. 🤍</div>
-<div class="pol" style="transform:rotate(-2deg)"><span class="tag">FOR YOU</span><img style="aspect-ratio:1" src="photo.jpeg"><div class="cap">a bouquet, always</div></div>
-<div class="pol" style="transform:rotate(3deg)"><span class="tag">ALWAYS</span><img style="aspect-ratio:1" src="photo1.jpeg"><div class="cap">only and only</div></div>
-<div class="note span" style="background:var(--blush);text-align:center;font:700 22px/1.3 Caveat">Live in balance, feel in peace.<br>Every day with you is my favourite. 🌷</div>
+<div class="sc" style="font-size:26px;text-align:center;color:var(--deep)">everything I want for us</div>
+<p class="sub" style="margin-bottom:16px">pinned, just for you</p>
+<div class="masonry">
+<div class="mitem"><div class="mphoto focus" id="bp0" style="transform:rotate(-4deg)"><div class="mtape"></div><img src=""><div class="mcap">my favourite person</div></div></div>
+<div class="mitem" style="transform:rotate(2deg)"><div class="mnote"><h4>Our little goals</h4><ul><li>More trips, together</li><li>Late-night long talks</li><li>Never sleep angry</li><li>Grow old, still silly</li></ul></div></div>
+<div class="mitem"><div class="mphoto side" style="transform:rotate(3deg)"><span class="mclip">📎</span><img src="photo.jpeg"><div class="mcap">for you</div></div></div>
+<div class="mitem"><div class="mphoto focus" id="bp1" style="transform:rotate(3deg)"><span class="mclip">📎</span><img src=""><div class="mcap">just us</div></div></div>
+<div class="mitem full"><div class="mquote">Do more of what you love, and love me a little more while you do. 🤍</div></div>
+<div class="mitem"><div class="mphoto focus" id="bp2" style="transform:rotate(-3deg)"><div class="mtape"></div><img src=""><div class="mcap">cherish every moment</div></div></div>
+<div class="mitem" style="transform:rotate(-2deg)"><div class="mnote"><h4>With you</h4><ul><li>I laugh a little louder</li><li>I worry a little less</li><li>I love a lot deeper</li></ul></div></div>
+<div class="mitem"><div class="mphoto side" style="transform:rotate(-2deg)"><span class="mclip" style="right:auto;left:14px;transform:rotate(-14deg)">📎</span><img src="photo1.jpeg"><div class="mcap">always</div></div></div>
+<div class="mitem full"><div class="mribbon">every moment with you is my favourite<span class="sc">I love you 🤍</span></div></div>
 </div>
 <div class="row"><button class="ghost sm" onclick="goTo('s-cert')">← Back</button><button class="btn cr" onclick="toPay()">Generate link →</button></div>
 <button class="ghost cr" style="margin-top:10px" onclick="restart()">Start over</button>
@@ -163,24 +175,25 @@ textarea.inp{resize:none;font-family:Caveat,cursive;font-size:18px;line-height:1
 <button class="ghost" style="margin-top:20px" onclick="goTo('s-gif')">Preview it</button>
 </section>
 </div>
+</div>
 
 <script>
 const SB=window.supabase.createClient('https://rulpkgkgieztsdvpkuso.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1bHBrZ2tnaWV6dHNkdnBrdXNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0ODE3OTYsImV4cCI6MjA5NjA1Nzc5Nn0.VY50njf_lIvFP5RpwlTTiSe2z8vnyuwP-Gi9krKk60U');
 const RZP='rzp_live_SmizRaPApu81ZS',BASE=99,COUPONS={BDAY:0,BDAY1:1,CAKE59:59},TABLE='lovenote',PK='love_pending_order_v1';
-const DEFAULT_MSG=`Every day with you feels like my favourite kind of day. You make the ordinary moments softer and the hard ones lighter, and I don't say thank you nearly enough for that.\n\nThank you for your patience, your laugh, and the way you love me even when I'm difficult. You're my calm, my home, my favourite person.\n\nI made this little something so that, even on the busiest days, you remember how deeply you are loved.\n\nAlways yours. 🤍`;
+const DEFAULT_MSG=`You make ordinary days feel like my favourite ones. Just wanted you to know how loved you are.\n\nAlways yours. 🤍`;
 const $=id=>document.getElementById(id);
 let S={recipient:'',sender:'',rel:'gf',message:'',photos:['','','']},slot=0,price=BASE,coupon=null,viewer=false,busy=false;
 $('i-msg').value=DEFAULT_MSG;
 const relWord=()=>S.rel==='gf'?'Girlfriend':'Boyfriend';
 
-/* ---------- sound: soft key ticks + a slow music-box loop ---------- */
-let ac=null,muted=false,music=null;
+/* ---------- sound: mechanical typewriter key clacks (no music) ---------- */
+let ac=null,muted=false;
 function audio(){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(ac&&ac.state==='suspended')ac.resume();return ac}
-function tone(f,t,d,v,ty){const o=ac.createOscillator(),g=ac.createGain();o.type=ty||'sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.05)}
-function tick(){if(muted||!ac)return;tone(1500+Math.random()*500,ac.currentTime,.05,.035,'triangle')}
-function startMusic(){if(music||!audio())return;const N=[523.25,659.25,783.99,659.25,440,523.25,659.25,523.25,587.33,698.46,880,698.46,392,493.88,587.33,493.88];let i=0;
-music=setInterval(()=>{if(muted)return;const t=ac.currentTime,f=N[i++%N.length];tone(f,t,1.8,.05);tone(f*2,t,1,.014);if(i%4===1)tone(f/2,t,2.4,.03)},650)}
-function stopMusic(){clearInterval(music);music=null}
+function tone(f,t,d,v,ty){const o=ac.createOscillator(),g=ac.createGain();o.type=ty||'sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.005);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.05)}
+function tick(){if(muted||!ac)return;const t=ac.currentTime;
+tone(120+Math.random()*35,t,.05,.06,'square');   // low mechanical thock
+tone(1800+Math.random()*250,t,.01,.02,'square'); // tiny high click, very short so it's not shrill
+}
 function toggleMute(){muted=!muted;$('mute').textContent=muted?'🔇':'🔊'}
 
 /* ---------- form ---------- */
@@ -196,7 +209,7 @@ if(!r||!s||!m){$('err').style.display='block';return}$('err').style.display='non
 
 /* ---------- typewriter ---------- */
 let tw=null;
-function typeLetter(text){clearInterval(tw);const t=$('l-txt'),b=$('l-body'),c=Array.from(text);let i=0;t.textContent='';$('l-cur').style.display='inline-block';
+function typeLetter(text){audio();clearInterval(tw);const t=$('l-txt'),b=$('l-body'),c=Array.from(text);let i=0;t.textContent='';$('l-cur').style.display='inline-block';
 tw=setInterval(()=>{const ch=c[i++]||'';t.textContent+=ch;if(ch.trim())tick();b.scrollTop=b.scrollHeight;if(i>=c.length){clearInterval(tw);$('l-cur').style.display='none'}},48)}
 
 /* ---------- certificate (canvas -> PNG) ---------- */
@@ -226,9 +239,9 @@ function dlCert(){try{const a=document.createElement('a');a.download=`best-${rel
 /* ---------- nav ---------- */
 function goTo(id){document.querySelectorAll('section').forEach(s=>s.style.display='none');const el=$(id);el.style.display='flex';el.style.animation='none';void el.offsetWidth;el.style.animation='';
 $('mute').style.display=['s-letter','s-cert','s-board'].includes(id)?'block':'none';
-if(id==='s-letter'){startMusic();typeLetter(S.message)}else clearInterval(tw);
-if(id==='s-cert')drawCert();if(id==='s-form')stopMusic();window.scrollTo(0,0)}
-function restart(){stopMusic();goTo('s-form')}
+if(id==='s-letter')typeLetter(S.message);else clearInterval(tw);
+if(id==='s-cert')drawCert();window.scrollTo(0,0)}
+function restart(){goTo('s-form')}
 
 /* ---------- coupons + payment ---------- */
 function toPay(){price=BASE;coupon=null;$('pay-price').textContent='₹'+price;$('pay-cp').style.display='none';$('i-cp').value='';$('cp-err').style.display='none';label();goTo('s-pay')}
