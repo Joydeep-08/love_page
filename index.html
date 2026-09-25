@@ -42,6 +42,7 @@ textarea.inp{resize:none;font-family:Caveat,cursive;font-size:18px;line-height:1
 .box{background:var(--blush);border-radius:14px;padding:14px;font-size:12.5px;color:var(--ink);text-align:center;margin-top:16px}
 .spin{width:26px;height:26px;border:3px solid var(--blush);border-top-color:var(--deep);border-radius:50%;animation:spin .8s linear infinite}
 .mute{position:absolute;top:12px;right:12px;z-index:5;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:none}
+.music-btn{position:absolute;top:12px;right:54px;z-index:5;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
 .back{position:absolute;top:12px;left:12px;z-index:5}
 /* polaroid + tape */
 .pol{background:#fff;padding:8px 8px 28px;box-shadow:0 6px 18px rgba(75,58,64,.16);position:relative}
@@ -107,6 +108,8 @@ textarea.inp{resize:none;font-family:Caveat,cursive;font-size:18px;line-height:1
 </style></head><body>
 <div class="frame">
 <div class="card">
+<button class="music-btn" id="music-btn" onclick="toggleMusic()">🎵</button>
+<audio id="bgm" src="music.mp3" loop preload="auto"></audio>
 <button class="mute" id="mute" onclick="toggleMute()">🔊</button>
 
 <section id="s-boot" style="display:none;align-items:center;justify-content:center;text-align:center">
@@ -250,6 +253,20 @@ function tick(){
   o.start(t);o.stop(t+.05);
 }
 function toggleMute(){muted=!muted;$('mute').textContent=muted?'🔇':'🔊'}
+
+/* ---------- background music (whole site, all pages/sections) ---------- */
+let musicOn=true,musicUnlocked=false;
+function unlockMusic(){
+  if(musicUnlocked)return;musicUnlocked=true;
+  const a=$('bgm');a.volume=.35;
+  if(musicOn)a.play().catch(()=>{});
+}
+['pointerdown','touchstart','click','keydown'].forEach(ev=>document.addEventListener(ev,unlockMusic,{once:true,passive:true}));
+function toggleMusic(){
+  const a=$('bgm');musicOn=!musicOn;$('music-btn').textContent=musicOn?'🎵':'🔇';
+  if(!musicUnlocked)return; // will start once the first tap unlocks it
+  if(musicOn)a.play().catch(()=>{});else a.pause();
+}
 
 /* ---------- form ---------- */
 function pickRel(el){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');S.rel=el.dataset.r}
