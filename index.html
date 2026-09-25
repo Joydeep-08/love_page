@@ -260,7 +260,7 @@ try{S.photos[i]=await compress(f);el.innerHTML=`<img src="${S.photos[i]}">`}catc
 function apply(){$('g-name').textContent=S.recipient;$('g-from').textContent=S.sender;$('l-name').textContent=S.recipient;$('l-from').textContent=S.sender;
 [0,1,2].forEach(i=>{const p=S.photos[i],b=$('bp'+i);b.style.display=p?'':'none';if(p)b.querySelector('img').src=p})}
 function startPreview(){const r=$('i-rec').value.trim(),s=$('i-snd').value.trim(),m=$('i-msg').value.trim();
-if(!r||!s||!m){$('err').style.display='block';return}$('err').style.display='none';S.recipient=r;S.sender=s;S.message=m;apply();goTo('s-gif')}
+if(!r||!s||!m){$('err').style.display='block';return}$('err').style.display='none';S.recipient=r;S.sender=s;S.message=m;apply();goTo('s-meter')}
 
 /* ---------- typewriter ---------- */
 let tw=null;
