@@ -86,6 +86,24 @@ textarea.inp{resize:none;font-family:Caveat,cursive;font-size:18px;line-height:1
 .mribbon{background:var(--deep);color:#fff;border-radius:10px;padding:12px 10px;font-size:11px;letter-spacing:.3px;text-align:center;line-height:1.6}
 .mribbon .sc{font-size:16px;display:block;margin-top:2px}
 .foot{text-align:center;font-size:10px;letter-spacing:2px;color:var(--soft);margin-top:18px}
+/* cuteness meter — shown only when opening a shared link */
+#s-meter{position:relative;overflow:hidden;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 50% 15%,#3d1a63,#1a0a2e 70%);color:#fff}
+.meter-wrap{width:100%;max-width:280px;position:relative;z-index:2}
+.meter-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20px;color:#f3e3ff;letter-spacing:.3px}
+.meter-note{font-family:Caveat,cursive;font-weight:600;font-size:19px;color:#e3b8ff;min-height:26px;margin:8px 0 20px;transition:opacity .15s}
+.meter-track{width:100%;height:18px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(216,160,255,.35);overflow:hidden;position:relative;box-shadow:inset 0 0 12px rgba(0,0,0,.45)}
+.meter-fill{height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#a855f7,#ec4899,#f472b6);box-shadow:0 0 16px rgba(236,72,153,.85)}
+.meter-fill.break{animation:meterbreak .6s ease}
+@keyframes meterbreak{0%{filter:brightness(1)}45%{filter:brightness(2.4) saturate(1.4)}100%{filter:brightness(1.15)}}
+.meter-pct{margin-top:10px;font:700 13px Nunito;color:#e9d5ff;letter-spacing:1px}
+.meter-burst{display:none;margin-top:20px}
+.meter-burst.show{display:block;animation:mpop .5s ease}
+.meter-burst .big{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:24px;color:#fff;text-shadow:0 0 18px #ec4899,0 0 36px #a855f7}
+.meter-burst .sc{color:#f0abfc;font-size:16px;margin-top:4px}
+@keyframes mpop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.hearts-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.hearts-fx span{position:absolute;bottom:-20px;opacity:.9;animation:floatup linear forwards}
+@keyframes floatup{to{transform:translateY(-380px) rotate(24deg);opacity:0}}
 </style></head><body>
 <div class="frame">
 <div class="card">
@@ -110,6 +128,17 @@ textarea.inp{resize:none;font-family:Caveat,cursive;font-size:18px;line-height:1
 </div>
 <div id="err" class="err">Add both names and a letter first.</div>
 <button class="btn" style="margin-top:18px" onclick="startPreview()">Preview the surprise →</button>
+</section>
+
+<section id="s-meter">
+<div class="hearts-fx" id="hearts-fx"></div>
+<div class="meter-wrap">
+<div class="meter-title">measuring the cuteness…</div>
+<div class="meter-note" id="meter-note">calibrating hearts…</div>
+<div class="meter-track"><div class="meter-fill" id="meter-fill"></div></div>
+<div class="meter-pct" id="meter-pct">0%</div>
+<div class="meter-burst" id="meter-burst"><div class="big">♾ UNLIMITED CUTENESS</div><div class="sc">scale officially broken</div></div>
+</div>
 </section>
 
 <section id="s-gif">
@@ -187,12 +216,38 @@ $('i-msg').value=DEFAULT_MSG;
 const relWord=()=>S.rel==='gf'?'Girlfriend':'Boyfriend';
 
 /* ---------- sound: mechanical typewriter key clacks (no music) ---------- */
-let ac=null,muted=false;
+let ac=null,muted=false,noiseBuf=null;
 function audio(){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(ac&&ac.state==='suspended')ac.resume();return ac}
-function tone(f,t,d,v,ty){const o=ac.createOscillator(),g=ac.createGain();o.type=ty||'sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.005);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.05)}
-function tick(){if(muted||!ac)return;const t=ac.currentTime;
-tone(120+Math.random()*35,t,.05,.06,'square');   // low mechanical thock
-tone(1800+Math.random()*250,t,.01,.02,'square'); // tiny high click, very short so it's not shrill
+function getNoiseBuf(){
+  if(noiseBuf)return noiseBuf;
+  const len=Math.floor(ac.sampleRate*0.05);
+  noiseBuf=ac.createBuffer(1,len,ac.sampleRate);
+  const d=noiseBuf.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  return noiseBuf;
+}
+function tick(){
+  if(muted||!ac||ac.state!=='running')return;
+  const t=ac.currentTime;
+  // percussive "clack" — filtered noise burst, sounds like an actual key strike
+  const src=ac.createBufferSource();
+  src.buffer=getNoiseBuf();
+  const bp=ac.createBiquadFilter();
+  bp.type='bandpass';bp.frequency.value=2000+Math.random()*1000;bp.Q.value=2.4;
+  const ng=ac.createGain();
+  ng.gain.setValueAtTime(0,t);
+  ng.gain.linearRampToValueAtTime(.32,t+.002);
+  ng.gain.exponentialRampToValueAtTime(.0001,t+.03);
+  src.connect(bp).connect(ng).connect(ac.destination);
+  src.start(t);src.stop(t+.04);
+  // low "thock" — the body of the strike, underneath the clack
+  const o=ac.createOscillator(),g=ac.createGain();
+  o.type='sine';o.frequency.value=90+Math.random()*30;
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(.16,t+.004);
+  g.gain.exponentialRampToValueAtTime(.0001,t+.045);
+  o.connect(g).connect(ac.destination);
+  o.start(t);o.stop(t+.05);
 }
 function toggleMute(){muted=!muted;$('mute').textContent=muted?'🔇':'🔊'}
 
@@ -209,8 +264,13 @@ if(!r||!s||!m){$('err').style.display='block';return}$('err').style.display='non
 
 /* ---------- typewriter ---------- */
 let tw=null;
-function typeLetter(text){audio();clearInterval(tw);const t=$('l-txt'),b=$('l-body'),c=Array.from(text);let i=0;t.textContent='';$('l-cur').style.display='inline-block';
-tw=setInterval(()=>{const ch=c[i++]||'';t.textContent+=ch;if(ch.trim())tick();b.scrollTop=b.scrollHeight;if(i>=c.length){clearInterval(tw);$('l-cur').style.display='none'}},48)}
+async function typeLetter(text){
+  const a=audio();
+  if(a&&a.state==='suspended'){try{await a.resume()}catch(e){}}
+  clearInterval(tw);
+  const t=$('l-txt'),b=$('l-body'),c=Array.from(text);let i=0;t.textContent='';$('l-cur').style.display='inline-block';
+  tw=setInterval(()=>{const ch=c[i++]||'';t.textContent+=ch;if(ch.trim())tick();b.scrollTop=b.scrollHeight;if(i>=c.length){clearInterval(tw);$('l-cur').style.display='none'}},48);
+}
 
 /* ---------- certificate (canvas -> PNG) ---------- */
 const loadImg=src=>new Promise(r=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src});
@@ -236,11 +296,46 @@ x.fillText(new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',yea
 x.beginPath();x.arc(790,1250,72,0,7);x.fillStyle='#F8DCE1';x.fill();x.lineWidth=4;x.strokeStyle=P;x.stroke();x.textAlign='center';heart(x,790,1235,17,D);x.fillStyle=INK;x.font='700 13px Nunito';x.fillText('100% APPROVED',790,1275)}
 function dlCert(){try{const a=document.createElement('a');a.download=`best-${relWord().toLowerCase()}-certificate.png`;a.href=$('cert').toDataURL('image/png');a.click()}catch(e){alert("Couldn't save the certificate. Try again.")}}
 
+/* ---------- cuteness meter (only shown when a shared link is opened) ---------- */
+const CUTE_NOTES=["calibrating hearts…","measuring the sparkle…","charging the blush levels…","detecting butterflies…","cross-checking with the moon…","running out of decimal places…","scale can't keep up…","recalculating infinity…"];
+function spawnHeart(){
+  const el=document.createElement('span');
+  el.textContent=['🤍','💗','✨','💕','💜'][Math.floor(Math.random()*5)];
+  el.style.left=Math.random()*100+'%';
+  el.style.fontSize=(12+Math.random()*14)+'px';
+  el.style.animationDuration=(1.8+Math.random()*1.2)+'s';
+  const wrap=$('hearts-fx');if(!wrap)return;
+  wrap.appendChild(el);
+  setTimeout(()=>el.remove(),3200);
+}
+let meterFillIv=null,meterNoteIv=null,meterHeartIv=null;
+function runMeter(next){
+  const fill=$('meter-fill'),pct=$('meter-pct'),note=$('meter-note'),burst=$('meter-burst');
+  clearInterval(meterFillIv);clearInterval(meterNoteIv);clearInterval(meterHeartIv);
+  fill.style.width='0%';fill.classList.remove('break');pct.textContent='0%';burst.classList.remove('show');
+  let p=0,ni=0;note.textContent=CUTE_NOTES[0];note.style.opacity=1;
+  meterNoteIv=setInterval(()=>{ni=(ni+1)%CUTE_NOTES.length;note.style.opacity=0;setTimeout(()=>{note.textContent=CUTE_NOTES[ni];note.style.opacity=1},150)},550);
+  meterHeartIv=setInterval(spawnHeart,220);
+  meterFillIv=setInterval(()=>{
+    p+=4+Math.random()*6;
+    if(p>=100){
+      p=100;clearInterval(meterFillIv);clearInterval(meterNoteIv);
+      fill.style.width='100%';pct.textContent='∞%';fill.classList.add('break');
+      setTimeout(()=>{note.style.opacity=1;note.textContent='scale broken.';burst.classList.add('show')},250);
+      setTimeout(()=>{clearInterval(meterHeartIv);next&&next()},2000);
+      return;
+    }
+    fill.style.width=p+'%';pct.textContent=Math.floor(p)+'%';
+  },220);
+}
+
 /* ---------- nav ---------- */
 function goTo(id){document.querySelectorAll('section').forEach(s=>s.style.display='none');const el=$(id);el.style.display='flex';el.style.animation='none';void el.offsetWidth;el.style.animation='';
 $('mute').style.display=['s-letter','s-cert','s-board'].includes(id)?'block':'none';
 if(id==='s-letter')typeLetter(S.message);else clearInterval(tw);
-if(id==='s-cert')drawCert();window.scrollTo(0,0)}
+if(id==='s-cert')drawCert();
+if(id==='s-meter')runMeter(()=>goTo('s-gif'));
+window.scrollTo(0,0)}
 function restart(){goTo('s-form')}
 
 /* ---------- coupons + payment ---------- */
@@ -281,6 +376,6 @@ function copyLink(){const i=$('out');i.select();navigator.clipboard.writeText(i.
 if(!id){if(load())$('resume').style.display='block';return}
 try{const{data,error}=await retryFn(()=>SB.from(TABLE).select('*').eq('id',id).eq('paid',true).single(),3,800);if(error||!data)throw error||new Error('not found');
 document.documentElement.classList.remove('boot');viewer=true;document.body.classList.add('viewer');
-Object.assign(S,{recipient:data.recipient,sender:data.sender,rel:data.relation||'gf',message:data.message,photos:[data.photo1||'',data.photo2||'',data.photo3||'']});apply();goTo('s-gif')
+Object.assign(S,{recipient:data.recipient,sender:data.sender,rel:data.relation||'gf',message:data.message,photos:[data.photo1||'',data.photo2||'',data.photo3||'']});apply();goTo('s-meter')
 }catch(e){console.error(e);document.querySelector('#s-boot .spin').style.display='none';$('boot-t').textContent="This link isn't loading. Check your connection and try again.";$('boot-r').style.display='inline-block'}})();
 </script></body></html>
