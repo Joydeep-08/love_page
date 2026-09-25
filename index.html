@@ -87,52 +87,36 @@ textarea.inp{resize:none;font-family:Caveat,cursive;font-size:18px;line-height:1
 .mribbon{background:var(--deep);color:#fff;border-radius:10px;padding:12px 10px;font-size:11px;letter-spacing:.3px;text-align:center;line-height:1.6}
 .mribbon .sc{font-size:16px;display:block;margin-top:2px}
 .foot{text-align:center;font-size:10px;letter-spacing:2px;color:var(--soft);margin-top:18px}
-/* gate + cuteness meter — dark glass "scene" shown on open, before the letter flow */
-.glass-scene{position:relative;overflow:hidden;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 50% 12%,#3d1a63,#150a28 78%);color:#fff}
-.blob{position:absolute;border-radius:50%;filter:blur(58px);opacity:.55;pointer-events:none;z-index:0}
-.b1{width:220px;height:220px;background:#a855f7;top:-70px;left:-50px;animation:blobmove 9s ease-in-out infinite}
-.b2{width:190px;height:190px;background:#ec4899;bottom:-60px;right:-40px;animation:blobmove 11s ease-in-out infinite reverse}
-.b3{width:160px;height:160px;background:#6366f1;top:38%;right:-70px;animation:blobmove 13s ease-in-out infinite}
-@keyframes blobmove{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(18px,-18px) scale(1.15)}}
-.amb-hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
-.amb-hearts span{position:absolute;bottom:-8%;opacity:0;animation:ambfloat linear infinite;filter:drop-shadow(0 0 4px rgba(236,72,153,.5))}
-.amb-hearts span:nth-child(1){left:6%;font-size:13px;animation-duration:7.5s;animation-delay:.1s}
-.amb-hearts span:nth-child(2){left:20%;font-size:9px;animation-duration:6.2s;animation-delay:1.6s}
-.amb-hearts span:nth-child(3){left:36%;font-size:15px;animation-duration:8.4s;animation-delay:.8s}
-.amb-hearts span:nth-child(4){left:52%;font-size:10px;animation-duration:6.8s;animation-delay:2.4s}
-.amb-hearts span:nth-child(5){left:68%;font-size:14px;animation-duration:7.9s;animation-delay:1.1s}
-.amb-hearts span:nth-child(6){left:80%;font-size:11px;animation-duration:6.5s;animation-delay:3s}
-.amb-hearts span:nth-child(7){left:92%;font-size:16px;animation-duration:9s;animation-delay:.4s}
-.amb-hearts span:nth-child(8){left:12%;font-size:10px;animation-duration:7.1s;animation-delay:2.9s}
-@keyframes ambfloat{0%{transform:translateY(0) rotate(0deg);opacity:0}12%{opacity:.75}88%{opacity:.4}100%{transform:translateY(-360px) rotate(30deg);opacity:0}}
-.gcard{position:relative;z-index:2;width:100%;max-width:270px;background:rgba(255,255,255,.07);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.16);border-radius:26px;padding:34px 22px;box-shadow:0 10px 40px rgba(168,85,247,.28),inset 0 1px 0 rgba(255,255,255,.14)}
+/* gate + cuteness meter — same stationery/ink aesthetic as the rest of the card, not a bolted-on dark widget */
+.ink-scene{position:relative;overflow:hidden;align-items:center;justify-content:center;text-align:center;background:var(--blush)}
+.ink-scene::before{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(184,59,94,.07) 1px,transparent 1px) 0 0/20px 20px;pointer-events:none}
+.ink-card{position:relative;z-index:2;width:100%;max-width:270px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:32px 24px;box-shadow:0 16px 34px -10px rgba(184,59,94,.28)}
+.ink-rule{width:30px;height:2px;background:var(--sage);margin:8px auto 4px;border-radius:2px}
 /* gate */
-.gate-heart{font-size:36px;animation:heartbeat 1.7s ease-in-out infinite}
-@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}45%{transform:scale(1.12)}60%{transform:scale(1)}}
-.gate-h{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:21px;margin-top:14px;color:#f3e3ff;line-height:1.3}
-.gate-sub{font-size:11.5px;color:#c9a6e8;margin:8px 0 22px;letter-spacing:.2px}
-.gate-btn{background:linear-gradient(90deg,#a855f7,#ec4899);border:none;box-shadow:0 8px 22px rgba(236,72,153,.42);font-size:13px}
-.gate-btn:hover{transform:translateY(-1px) scale(1.02)}
+.gate-seal{width:52px;height:52px;margin:0 auto;border-radius:50%;border:1.5px solid var(--sage);background:var(--blush);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--deep)}
+.gate-h{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;font-size:21px;margin-top:16px;color:var(--ink);line-height:1.3}
+.gate-sub{font-family:Nunito;font-size:11.5px;color:var(--soft);margin:8px 0 22px;letter-spacing:.2px}
 /* ring meter */
-.ring-wrap{position:relative;width:172px;height:172px;margin:2px auto 6px}
+.meter-title2{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;font-size:16px;color:var(--ink);letter-spacing:.2px}
+.ring-wrap{position:relative;width:158px;height:158px;margin:14px auto 4px}
 .ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
-.ring-bg{fill:none;stroke:rgba(255,255,255,.09);stroke-width:9}
-.ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:9;stroke-linecap:round;filter:drop-shadow(0 0 8px rgba(236,72,153,.6))}
+.ring-bg{fill:none;stroke:var(--line);stroke-width:2.5}
+.ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:2.5;stroke-linecap:round;filter:drop-shadow(0 1px 2px rgba(184,59,94,.3))}
 .ring-fg.break{animation:ringbreak .6s ease}
-@keyframes ringbreak{0%{filter:drop-shadow(0 0 8px rgba(236,72,153,.6))}50%{filter:drop-shadow(0 0 26px rgba(236,72,153,1)) brightness(1.7)}100%{filter:drop-shadow(0 0 14px rgba(236,72,153,.85))}}
+@keyframes ringbreak{0%{filter:drop-shadow(0 1px 2px rgba(184,59,94,.3))}50%{filter:drop-shadow(0 2px 8px rgba(184,59,94,.55))}100%{filter:drop-shadow(0 1px 3px rgba(184,59,94,.35))}}
 .ring-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
-.ring-pct{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:33px;background:linear-gradient(90deg,#f0abfc,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent}
-.ring-label{font-size:8.5px;letter-spacing:2px;color:#c9a6e8;margin-top:2px}
-.meter-title2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:17px;color:#f3e3ff;letter-spacing:.2px}
-.meter-note2{font-family:Caveat,cursive;font-weight:600;font-size:18px;color:#e3b8ff;min-height:24px;margin-top:10px;transition:opacity .15s}
+.ring-pct{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:32px;color:var(--deep)}
+.ring-label{font-family:Nunito;font-size:8px;letter-spacing:3px;color:var(--soft);margin-top:3px}
+.meter-note2{font-family:Caveat,cursive;font-weight:600;font-size:18px;color:var(--soft);min-height:24px;margin-top:14px;transition:opacity .15s}
 .meter-burst2{display:none;margin-top:14px}
 .meter-burst2.show{display:block;animation:mpop .5s ease}
-.meter-burst2 .big{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:21px;color:#fff;text-shadow:0 0 16px #ec4899,0 0 32px #a855f7}
-.meter-burst2 .sc{color:#f0abfc;font-size:14px;margin-top:3px}
-@keyframes mpop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.seal{width:58px;height:58px;margin:0 auto 8px;border-radius:50%;background:var(--deep);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:22px;box-shadow:0 6px 16px rgba(184,59,94,.35);border:2px solid var(--kraft)}
+.meter-burst2 .big{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:13px;letter-spacing:2.5px;color:var(--deep);text-transform:uppercase}
+.meter-burst2 .sc{font-family:Caveat,cursive;color:var(--soft);font-size:15px;margin-top:3px}
+@keyframes mpop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
 .burst-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
-.burst-fx span{position:absolute;bottom:-20px;opacity:.9;animation:floatup linear forwards}
-@keyframes floatup{to{transform:translateY(-380px) rotate(24deg);opacity:0}}
+.burst-fx span{position:absolute;bottom:40%;left:50%;opacity:0;font-family:'Cormorant Garamond',serif;color:var(--sage);animation:sparkleup .9s ease-out forwards}
+@keyframes sparkleup{0%{transform:translate(-50%,0) scale(.4);opacity:0}30%{opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-90px * var(--h))) scale(1);opacity:0}}
 </style></head><body>
 <div class="frame">
 <div class="card">
@@ -161,33 +145,30 @@ textarea.inp{resize:none;font-family:Caveat,cursive;font-size:18px;line-height:1
 <button class="btn" style="margin-top:18px" onclick="startPreview()">Preview the surprise →</button>
 </section>
 
-<section id="s-gate" class="glass-scene">
-<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-<div class="amb-hearts"><span>🤍</span><span>✨</span><span>💗</span><span>🤍</span><span>💕</span><span>✨</span><span>🤍</span><span>💜</span></div>
-<div class="gcard">
-<div class="gate-heart">🤍</div>
+<section id="s-gate" class="ink-scene">
+<div class="ink-card">
+<div class="gate-seal">♡</div>
 <div class="gate-h">A little surprise for<br><span id="gate-name">you</span></div>
-<p class="gate-sub">turn your sound on, it's better that way</p>
-<button class="btn gate-btn" onclick="openGate()">Open your surprise</button>
+<div class="ink-rule"></div>
+<p class="gate-sub">turn your sound on — it's better that way</p>
+<button class="btn" onclick="openGate()">Open your surprise →</button>
 </div>
 </section>
 
-<section id="s-meter" class="glass-scene">
-<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-<div class="amb-hearts"><span>🤍</span><span>✨</span><span>💗</span><span>🤍</span><span>💕</span><span>✨</span><span>🤍</span><span>💜</span></div>
+<section id="s-meter" class="ink-scene">
 <div class="burst-fx" id="hearts-fx"></div>
-<div class="gcard">
+<div class="ink-card">
 <div class="meter-title2">measuring the cuteness</div>
 <div class="ring-wrap">
-<svg viewBox="0 0 172 172">
-<defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a855f7"/><stop offset="55%" stop-color="#ec4899"/><stop offset="100%" stop-color="#f472b6"/></linearGradient></defs>
-<circle class="ring-bg" cx="86" cy="86" r="76"></circle>
-<circle class="ring-fg" id="meter-ring" cx="86" cy="86" r="76"></circle>
+<svg viewBox="0 0 158 158">
+<defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E28AA3"/><stop offset="60%" stop-color="#B83B5E"/><stop offset="100%" stop-color="#C9A13B"/></linearGradient></defs>
+<circle class="ring-bg" cx="79" cy="79" r="70"></circle>
+<circle class="ring-fg" id="meter-ring" cx="79" cy="79" r="70"></circle>
 </svg>
 <div class="ring-center"><div class="ring-pct" id="meter-pct">0%</div><div class="ring-label">CUTENESS</div></div>
 </div>
 <div class="meter-note2" id="meter-note">calibrating hearts…</div>
-<div class="meter-burst2" id="meter-burst"><div class="big">♾ UNLIMITED CUTENESS</div><div class="sc">scale officially broken</div></div>
+<div class="meter-burst2" id="meter-burst"><div class="seal">♾</div><div class="big">Unlimited Cuteness</div><div class="sc">scale officially broken</div></div>
 </div>
 </section>
 
@@ -361,28 +342,32 @@ x.fillText(new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',yea
 x.beginPath();x.arc(790,1250,72,0,7);x.fillStyle='#F8DCE1';x.fill();x.lineWidth=4;x.strokeStyle=P;x.stroke();x.textAlign='center';heart(x,790,1235,17,D);x.fillStyle=INK;x.font='700 13px Nunito';x.fillText('100% APPROVED',790,1275)}
 function dlCert(){try{const a=document.createElement('a');a.download=`best-${relWord().toLowerCase()}-certificate.png`;a.href=$('cert').toDataURL('image/png');a.click()}catch(e){alert("Couldn't save the certificate. Try again.")}}
 
-/* ---------- cuteness meter — smooth rAF-driven glass ring, no jank ---------- */
+/* ---------- cuteness meter — smooth rAF-driven ring, ink/paper theme ---------- */
 const CUTE_NOTES=["calibrating hearts…","measuring the sparkle…","charging the blush levels…","detecting butterflies…","cross-checking with the moon…","running out of decimal places…","scale can't keep up…","recalculating infinity…"];
-function spawnHeart(){
+function sparkleBurst(){
   const wrap=$('hearts-fx');if(!wrap)return;
-  const el=document.createElement('span');
-  el.textContent=['🤍','💗','✨','💕','💜'][Math.floor(Math.random()*5)];
-  el.style.left=Math.random()*100+'%';
-  el.style.fontSize=(12+Math.random()*14)+'px';
-  el.style.animationDuration=(1.8+Math.random()*1.2)+'s';
-  wrap.appendChild(el);
-  setTimeout(()=>el.remove(),3200);
+  const marks=['✦','❋','·','✦','·'];
+  for(let i=0;i<7;i++){
+    setTimeout(()=>{
+      const el=document.createElement('span');
+      el.textContent=marks[i%marks.length];
+      el.style.fontSize=(11+Math.random()*13)+'px';
+      el.style.setProperty('--dx',(Math.random()*140-70)+'px');
+      el.style.setProperty('--h',(1+Math.random()*.6).toFixed(2));
+      wrap.appendChild(el);
+      setTimeout(()=>el.remove(),1000);
+    },i*60);
+  }
 }
-let meterNoteIv=null,meterHeartIv=null,meterRaf=null;
+let meterNoteIv=null,meterRaf=null;
 function runMeter(next){
   const ring=$('meter-ring'),pct=$('meter-pct'),note=$('meter-note'),burst=$('meter-burst');
-  clearInterval(meterNoteIv);clearInterval(meterHeartIv);cancelAnimationFrame(meterRaf);
-  const R=76,C=2*Math.PI*R;
+  clearInterval(meterNoteIv);cancelAnimationFrame(meterRaf);
+  const R=70,C=2*Math.PI*R;
   ring.style.strokeDasharray=C;ring.style.strokeDashoffset=C;ring.classList.remove('break');
   pct.textContent='0%';burst.classList.remove('show');
   let ni=0;note.textContent=CUTE_NOTES[0];note.style.opacity=1;
   meterNoteIv=setInterval(()=>{ni=(ni+1)%CUTE_NOTES.length;note.style.opacity=0;setTimeout(()=>{note.textContent=CUTE_NOTES[ni];note.style.opacity=1},150)},600);
-  meterHeartIv=setInterval(spawnHeart,260);
   const dur=3000,start=performance.now(),ease=t=>1-Math.pow(1-t,3);
   function frame(now){
     const t=Math.min(1,(now-start)/dur),e=ease(t);
@@ -394,7 +379,8 @@ function runMeter(next){
     ring.classList.add('break');
     note.style.opacity=1;note.textContent='scale broken.';
     burst.classList.add('show');
-    setTimeout(()=>{clearInterval(meterHeartIv);next&&next()},2000);
+    sparkleBurst();
+    setTimeout(()=>{next&&next()},1800);
   }
   meterRaf=requestAnimationFrame(frame);
 }
