@@ -283,19 +283,22 @@ function tick(){
 function toggleMute(){muted=!muted;$('mute').textContent=muted?'🔇':'🔊'}
 
 /* ---------- background music (whole site, all pages/sections) ---------- */
+// syncMusic() just enforces "should it be playing right now" — called from
+// every possible first-gesture source, so whichever fires first wins cleanly
+// (no once-only race between the auto-unlock and the toggle button).
 let musicOn=true,musicUnlocked=false;
-function unlockMusic(){
-  if(musicUnlocked)return;musicUnlocked=true;
+function syncMusic(){
   const a=$('bgm');a.volume=.35;
-  if(musicOn)a.play().catch(()=>{});
+  if(!musicOn){a.pause();return}
+  const p=a.play();
+  if(p&&p.then)p.then(()=>musicUnlocked=true).catch(()=>{});else musicUnlocked=true;
 }
-['pointerdown','touchstart','click','keydown'].forEach(ev=>document.addEventListener(ev,unlockMusic,{once:true,passive:true}));
+['click','touchend','keydown'].forEach(ev=>document.addEventListener(ev,syncMusic,{passive:true}));
 function toggleMusic(){
-  const a=$('bgm');musicOn=!musicOn;$('music-btn').textContent=musicOn?'🎵':'🔇';
-  if(!musicUnlocked)return; // will start once the first tap unlocks it
-  if(musicOn)a.play().catch(()=>{});else a.pause();
+  musicOn=!musicOn;$('music-btn').textContent=musicOn?'🎵':'🔇';
+  syncMusic();
 }
-function openGate(){unlockMusic();goTo('s-meter')}
+function openGate(){syncMusic();goTo('s-meter')}
 
 /* ---------- form ---------- */
 function pickRel(el){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');S.rel=el.dataset.r}
